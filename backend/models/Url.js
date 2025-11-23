@@ -1,4 +1,4 @@
-import { DataTypes } from " ";
+import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
 
 const Url = sequelize.define("Url", {
