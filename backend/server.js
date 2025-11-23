@@ -11,7 +11,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    origin: "*",
     methods: "GET,POST,PUT,DELETE",
     allowedHeaders: "Content-Type,Authorization",
   })
@@ -40,7 +40,7 @@ async function initializeDatabase() {
     try {
       await sequelize.authenticate();
       console.log("Connected to Neon PostgreSQL");
-      await sequelize.sync({ alter: false }); // Use 'false' in production
+      await sequelize.sync({ alter: false });
       console.log("Models synced");
       dbInitialized = true;
     } catch (err) {
@@ -50,7 +50,6 @@ async function initializeDatabase() {
   }
 }
 
-// Initialize DB on first request (serverless-friendly)
 app.use(async (req, res, next) => {
   try {
     await initializeDatabase();
@@ -60,11 +59,8 @@ app.use(async (req, res, next) => {
   }
 });
 
-// For local development
 const PORT = process.env.PORT || 5000;
-if (process.env.NODE_ENV !== "production") {
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-}
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 // Export for Vercel
 export default app;
