@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 const sequelize = new Sequelize(process.env.POSTGRES_URL, {
   dialect: "postgres",
+  dialectModule: await import("pg"),
   protocol: "postgres",
   dialectOptions: {
     ssl: {
